@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="kk" class="welcome-lock">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -180,6 +180,123 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; }
   from{ transform: rotate(0deg); }
   to{ transform: rotate(360deg); }
 }
+
+/* ============================================================
+   4.2 КІРІСПЕ БЕТ / WELCOME SCREEN (fullscreen intro)
+   ============================================================ */
+html.welcome-lock, html.welcome-lock body{
+  overflow: hidden;
+  height: 100%;
+}
+.welcome-screen{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding: var(--space-lg) var(--space-sm);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(201,162,75,.28), transparent 55%),
+    radial-gradient(circle at 75% 80%, rgba(31,75,74,.45), transparent 55%),
+    linear-gradient(150deg, #2c0d16, var(--color-wine-deep) 45%, var(--color-wine) 100%);
+  opacity: 1;
+  transition: opacity .8s var(--ease-silk), visibility 0s linear 0s;
+}
+.welcome-screen.is-fading{
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .8s var(--ease-silk), visibility 0s linear .8s;
+  visibility: hidden;
+}
+.welcome-frame{
+  position:absolute;
+  inset: 18px;
+  border: 1px solid rgba(201,162,75,.55);
+  pointer-events:none;
+}
+.welcome-shanyrak{
+  width: clamp(120px, 20vw, 190px);
+  height: clamp(120px, 20vw, 190px);
+  margin: 0 auto var(--space-sm);
+  opacity:0;
+  animation: rise-in 1s var(--ease-silk) .15s forwards, rotate-slow 90s linear infinite;
+}
+.welcome-shanyrak svg{ width:100%; height:100%; }
+.welcome-eyebrow{
+  font-family: var(--font-script);
+  font-size: clamp(.8rem, 1.6vw, .95rem);
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing: 3.5px;
+  color: var(--color-gold-light);
+  opacity:0;
+  animation: rise-in 1s var(--ease-silk) .35s forwards;
+}
+.welcome-names{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: clamp(12px, 3vw, 28px);
+  flex-wrap:wrap;
+  margin-top: var(--space-sm);
+}
+.welcome-names .name{
+  font-size: clamp(2.1rem, 7vw, 4.4rem);
+  font-weight:200;
+  letter-spacing: 1px;
+  color: var(--color-cream);
+  line-height:1;
+  opacity:0;
+  transform: translateY(24px);
+  animation: rise-in 1s var(--ease-silk) forwards;
+}
+.welcome-names .name.groom{ animation-delay:.5s; }
+.welcome-names .name.bride{ animation-delay:.7s; }
+.welcome-amp{
+  font-family: var(--font-script);
+  font-weight:200;
+  font-size: clamp(1.5rem, 4vw, 2.6rem);
+  color: var(--color-gold);
+  opacity:0;
+  animation: rise-in 1s var(--ease-silk) .6s forwards;
+}
+.welcome-sub{
+  margin-top: var(--space-sm);
+  font-size: clamp(.85rem, 1.6vw, 1.05rem);
+  letter-spacing: 2.5px;
+  text-transform:uppercase;
+  color: rgba(251,244,231,.8);
+  opacity:0;
+  animation: rise-in 1s var(--ease-silk) .9s forwards;
+}
+.welcome-btn{
+  margin-top: var(--space-lg);
+  display:inline-flex;
+  align-items:center;
+  gap: 12px;
+  padding: 18px 52px;
+  border-radius: 999px;
+  background: var(--color-gold);
+  color: var(--color-wine-deep);
+  font-size: 1.05rem;
+  font-weight:700;
+  letter-spacing: 1.5px;
+  text-transform:uppercase;
+  box-shadow: 0 16px 36px -12px rgba(0,0,0,.55);
+  opacity:0;
+  animation: rise-in 1s var(--ease-silk) 1.15s forwards;
+  transition: transform .35s var(--ease-silk), box-shadow .35s var(--ease-silk), background .35s;
+}
+.welcome-btn:hover{
+  transform: translateY(-3px) scale(1.03);
+  background: var(--color-gold-light);
+  box-shadow: 0 20px 40px -12px rgba(0,0,0,.6);
+}
+.welcome-btn:active{ transform: translateY(0) scale(.98); }
+.welcome-btn svg{ width:20px; height:20px; }
 
 /* ============================================================
    5. ЖОҒАРЫ НАВИГАЦИЯ (жеңіл, минимал)
@@ -701,6 +818,49 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; }
 </head>
 <body>
 
+<!-- ============================================================
+     КІРІСПЕ БЕТ / WELCOME SCREEN — сайт ашылғанда бірінші көрінеді
+     ============================================================ -->
+<div id="welcomeScreen" class="welcome-screen" role="dialog" aria-modal="true" aria-label="Шақыртуды ашу">
+  <div class="welcome-frame" aria-hidden="true"></div>
+
+  <div class="welcome-shanyrak" aria-hidden="true">
+    <svg viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="94" stroke="#C9A24B" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="78" stroke="#C9A24B" stroke-width="1" stroke-dasharray="2 6"/>
+      <g stroke="#C9A24B" stroke-width="1.3">
+        <line x1="100" y1="6" x2="100" y2="194"/>
+        <line x1="6" y1="100" x2="194" y2="100"/>
+        <line x1="33" y1="33" x2="167" y2="167"/>
+        <line x1="167" y1="33" x2="33" y2="167"/>
+      </g>
+      <g stroke="#E8CE8F" stroke-width="1.6" fill="none">
+        <path d="M100 20 Q120 45 100 70 Q80 45 100 20 Z"/>
+        <path d="M100 130 Q120 155 100 180 Q80 155 100 130 Z"/>
+        <path d="M20 100 Q45 80 70 100 Q45 120 20 100 Z"/>
+        <path d="M130 100 Q155 80 180 100 Q155 120 130 100 Z"/>
+      </g>
+      <circle cx="100" cy="100" r="14" fill="#C9A24B"/>
+      <circle cx="100" cy="100" r="6" fill="#2c0d16"/>
+    </svg>
+  </div>
+
+  <p class="welcome-eyebrow">Сүйіспеншілік пен бақыттың басталуы</p>
+
+  <div class="welcome-names">
+    <span class="name groom">Асет</span>
+    <span class="welcome-amp">&amp;</span>
+    <span class="name bride">Ақбота</span>
+  </div>
+
+  <p class="welcome-sub">Үйлену тойына шақырамыз</p>
+
+  <button id="welcomeOpenBtn" type="button" class="welcome-btn">
+    <span>Ашу</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</div>
+
 <canvas id="petal-canvas" aria-hidden="true"></canvas>
 
 <!-- ============================================================
@@ -938,22 +1098,59 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; }
 
 <script>
 
-const music = document.getElementById("bgMusic");
+  const music = document.getElementById("bgMusic");
 let started = false;
 
-async function startMusic() {
+function startMusic() {
   if (started) return;
   started = true;
 
-  try {
-    await music.play();
-    document.getElementById("musicToggle").classList.add("is-playing");
-  } catch (e) {
-    console.log(e);
-  }
+  music.play().catch(err => console.log(err));
+
+  window.removeEventListener("touchstart", startMusic);
+  window.removeEventListener("scroll", startMusic);
+  window.removeEventListener("click", startMusic);
 }
 
-document.body.addEventListener("pointerdown", startMusic, { once: true });
+window.addEventListener("touchstart", startMusic, { once: true });
+window.addEventListener("scroll", startMusic, { once: true });
+window.addEventListener("click", startMusic, { once: true });
+/* ============================================================
+   JS -1: КІРІСПЕ БЕТ (Welcome Screen) — «Ашу» батырмасы
+   ============================================================ */
+(function(){
+  var welcome = document.getElementById('welcomeScreen');
+  var openBtn = document.getElementById('welcomeOpenBtn');
+  var audio = document.getElementById('bgMusic');
+  var musicBtn = document.getElementById('musicToggle');
+  if(!welcome || !openBtn) return;
+
+  function closeWelcome(){
+    document.documentElement.classList.remove('welcome-lock');
+    welcome.classList.add('is-fading');
+    window.setTimeout(function(){
+      if(welcome && welcome.parentNode){
+        welcome.parentNode.removeChild(welcome);
+      }
+    }, 850);
+  }
+
+  openBtn.addEventListener('click', function(){
+    /* Музыканы дәл осы click оқиғасының ішінде іске қосамыз —
+       Android/Brave/Chrome/Safari autoplay саясаттарына сай болу үшін */
+    if(audio){
+      var playPromise = audio.play();
+      if(playPromise && typeof playPromise.catch === 'function'){
+        playPromise.catch(function(){ /* тыйым салынса, үнсіз қалады */ });
+      }
+      if(musicBtn){
+        musicBtn.classList.add('is-playing');
+        musicBtn.setAttribute('aria-pressed', 'true');
+      }
+    }
+    closeWelcome();
+  }, { once: true });
+})();
 
 /* ============================================================
    JS 0: МУЗЫКА ПЛЕЕРІ — қосу/өшіру
