@@ -938,23 +938,20 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; }
 
 <script>
 
-  const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 let started = false;
 
 function startMusic() {
   if (started) return;
   started = true;
 
-  music.play().catch(err => console.log(err));
-
-  window.removeEventListener("touchstart", startMusic);
-  window.removeEventListener("scroll", startMusic);
-  window.removeEventListener("click", startMusic);
+  music.play().catch(err => {
+    console.log(err);
+  });
 }
 
-window.addEventListener("touchstart", startMusic, { once: true });
-window.addEventListener("scroll", startMusic, { once: true });
-window.addEventListener("click", startMusic, { once: true });
+document.addEventListener("touchstart", startMusic, { once: true });
+document.addEventListener("click", startMusic, { once: true });
 /* ============================================================
    JS 0: МУЗЫКА ПЛЕЕРІ — қосу/өшіру
    ============================================================ */
